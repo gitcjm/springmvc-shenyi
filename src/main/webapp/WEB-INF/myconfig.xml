@@ -1,0 +1,17 @@
+<Shenyi-Beans>
+    <bean id="cb" class="myclass">
+        <prop name="age" value="18">
+
+        </prop>
+    </bean>
+
+    <bean id="sb" class="shenyiclass">
+        <prop name="age" value="20">
+
+        </prop>
+    </bean>
+
+    <filter>
+
+    </filter>
+</Shenyi-Beans>
