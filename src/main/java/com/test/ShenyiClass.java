@@ -15,6 +15,9 @@ import java.util.List;
 
 public class ShenyiClass {
 
+    @ShenyiLoad
+    com.test.ShenyiBean sb;
+
     // 在此使用了“我自己的注解”
     @ShenyiAnnotation(name = "an", age = 20)
     public void getMe(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -36,12 +39,13 @@ public class ShenyiClass {
         resp.setHeader("Content-type", "text/html; Charset=utf-8");
         // 获取配置文件
         String mycfg = this.getClass().getClassLoader().getResource("")
-                .getPath() + "../myconfig.xml";
+                .getPath() + "../shenyi-serv.xml";
         //resp.getWriter().write(mycfg);
         // 读取配置文件
         try {
             XMLConfiguration xc = new XMLConfiguration();
             xc.load(mycfg);
+
             ConfigurationNode root = xc.getRootNode();
             //resp.getWriter().write(root.getName());
             List<ConfigurationNode> list = root.getChildren();

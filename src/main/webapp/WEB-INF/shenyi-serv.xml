@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Shenyi-Beans>
+    <bean id="sb" class="com.test.ShenyiBean">
+        <prop name="phone" value="136-0359-1010"/>
+
+    </bean>
+
+</Shenyi-Beans>

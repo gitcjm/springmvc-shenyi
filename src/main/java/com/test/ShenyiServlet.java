@@ -13,10 +13,26 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class ShenyiServlet extends HttpServlet {
+
+    // 反射调用对象的方法
+    private  Object invokeMethod(Object obj, String methodName, Object[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Class objClass = obj.getClass();
+
+        Class[] argsClass = new Class[args.length];
+        for(int i=0; i<args.length; i++) {
+            argsClass[i] = args[i].getClass();
+        }
+
+        Method method = objClass.getMethod(methodName, argsClass);
+
+        return  method.invoke(obj, args);
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setHeader("Content-type", "text/html; Charset=utf-8");
@@ -31,6 +47,25 @@ public class ShenyiServlet extends HttpServlet {
             String getUri = req.getRequestURI();
             getUri = getUri.replace("/shenyi_war_exploded/myservlet/", "");
 
+            // 获取应用类中的字段
+            Field[] fields = c.getDeclaredFields();
+            for(Field f : fields) {
+                //pw.write(f.getName());    // sb
+                //pw.write(f.getType().getName());    // com.test.ShenyiBean
+                String fClassName = f.getType().getName();
+                if (fClassName == "com.test.ShenyiBean") {
+                    Class fClass = Class.forName(fClassName);
+                    Object fObject = fClass.newInstance();
+                    // 调用字段对象的方法
+                    invokeMethod(fObject, "setPhone", new Object[]{"0359-8766568"});
+                    Object getPhone = invokeMethod(fObject, "getPhone", new Object[]{});
+
+                    pw.write(getPhone.toString());
+                }
+            }
+
+            // 不再执行后面的代码
+            pw.close();
             Method[] mList = c.getMethods();
             for (Method m : mList) {
                 // 根据注解，调用相应的方法
@@ -50,6 +85,8 @@ public class ShenyiServlet extends HttpServlet {
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
     }
