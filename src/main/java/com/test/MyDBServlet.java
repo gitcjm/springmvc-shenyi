@@ -17,13 +17,15 @@ public class MyDBServlet extends HttpServlet {
 
     // 继承 HttpServlet 类，就要覆盖 doGet 方法
     @RequestMapping(value = "/mydb", method = RequestMethod.GET )
-    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException
+    {
         resp.setHeader("Content-type", "text/html; Charset=utf-8");
         PrintWriter pw = resp.getWriter();
 
         // 连接 mysql 数据库
-        String conn_url = "jdbc:mysql://localhost:3306/jt_product?user=root&password=Mysql57@deb" +
-                "&useUnicode=true&characterEncoding=utf-8";
+        String conn_url = "jdbc:mysql://localhost:3306/jt_product?user=root" +
+                "&password=Mysql57@deb&useUnicode=true&characterEncoding=utf-8";
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conn = DriverManager.getConnection(conn_url);

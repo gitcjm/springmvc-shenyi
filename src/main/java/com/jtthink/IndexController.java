@@ -5,6 +5,7 @@ package com.jtthink;
  */
 
 import com.test.ShenyiBean;
+import com.test.ShenyiPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,9 @@ public class IndexController {
     ShenyiBean sb;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public void loadIndex(HttpServletResponse resp) throws IOException, ClassNotFoundException, SQLException {
+    public void loadIndex(HttpServletResponse resp)
+            throws IOException, ClassNotFoundException, SQLException
+    {
         resp.setHeader("Content-type", "text/html; Charset=utf-8");
         PrintWriter pw = resp.getWriter();
 
@@ -32,12 +35,18 @@ public class IndexController {
         pw.write(sb.getName() + "<br/>" + sb.getPhone());*/
 
         // 连接mysql数据库（官方文档上有示例）
-        String conn_url = "jdbc:mysql://localhost:3306/jt_product?user=root&password=Mysql57@deb" +
-                "&useUnicode=true&characterEncoding=utf-8";
-        Class.forName("com.mysql.cj.jdbc.Driver");  // mysql-connector-java 8.0版与5.1版有区别
+        /*String conn_url = "jdbc:mysql://localhost:3306/jt_product?user=root
+                &password=Mysql57@deb&useUnicode=true&characterEncoding=utf-8";
+        // mysql-connector-java 8.0版与5.1版有区别
+        Class.forName("com.mysql.cj.jdbc.Driver");
         Connection conn = DriverManager.getConnection(conn_url);
         Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("select sleep(15)");
-        conn.close();
+        ResultSet rs = stmt.executeQuery("select sleep(10)");
+        conn.close();*/
+
+        // 使用数据库连接池
+        Class.forName("com.test.ShenyiPool");
+        com.test.ShenyiPool.getConnection().createStatement()
+                .executeQuery("select sleep(10)");
     }
 }
