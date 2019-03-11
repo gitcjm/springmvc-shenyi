@@ -46,7 +46,8 @@ public class IndexController {
 
         // 使用数据库连接池
         Class.forName("com.test.ShenyiPool");
-        com.test.ShenyiPool.getConnection().createStatement()
-                .executeQuery("select sleep(10)");
+        Connection conn = com.test.ShenyiPool.getConnection();
+        conn.createStatement().executeQuery("select sleep(15)");
+        com.test.ShenyiPool.freeConnection(conn);
     }
 }
