@@ -9,7 +9,7 @@ public class ShenyiPool {
     /**
      * 数据库连接字符串
      * */
-    static String conn_url = "jdbc:mysql://localhost:3306/jt_product?" +
+    private static String conn_url = "jdbc:mysql://localhost:3306/jt_product?" +
             "user=root&password=Mysql57@deb&useUnicode=true&characterEncoding=utf-8";
     /**
      * 自定义连接池
@@ -17,7 +17,7 @@ public class ShenyiPool {
      * "0": connection is sleeep
      * "1": connection is busy
      * */
-    static Map<Connection, String> pools;
+    private static Map<Connection, String> pools;
 
     // 静态代码块：首先被执行，且只执行一次，常驻内存
     static {
@@ -61,7 +61,7 @@ public class ShenyiPool {
 
     // 释放一个连接
     public static void freeConnection(Connection conn) {
-        // 将连接标记为闲
+        // 将连接标记为空闲
         pools.replace(conn, "1", "0");
     }
 }

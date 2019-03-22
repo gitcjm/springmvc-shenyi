@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <aop:config>
+        <aop:aspect ref="CommonTool">
+            <aop:pointcut id="userLogin" expression=
+                    "execution(* com.test.service.StudentService.userLogin(..))"></aop:pointcut>
+            <aop:before method="addUserLog" pointcut-ref="userLogin"></aop:before>
+            <aop:after-returning returning="logined" method="addUserOnline" pointcut-ref="userLogin"></aop:after-returning>
+        </aop:aspect>
+        <aop:aspect ref="CommonTool">
+            <aop:pointcut id="teacherLogin" expression=
+                    "execution(* com.test.service.TeacherService.userLogin(..))"></aop:pointcut>
+            <aop:before method="addUserLog" pointcut-ref="teacherLogin"></aop:before>
+            <aop:after-returning returning="logined" method="addUserOnline" pointcut-ref="teacherLogin"></aop:after-returning>
+        </aop:aspect>
+    </aop:config>
+
+    <bean id="CommonTool" class="com.test.service.CommonTool"></bean>
+    <bean id="StudentService" class="com.test.service.StudentService"></bean>
+    <bean id="TeacherService" class="com.test.service.TeacherService"/>
+</beans>

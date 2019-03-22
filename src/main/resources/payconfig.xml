@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="userpay" class="com.test.service.UserPay" >
+        <property name="payMethod" ref="alipay"/>  <!-- "ref"表示引用其他bean -->
+    </bean>
+
+    <bean id="bankpay" class="com.test.service.BankPay"/>
+    <bean id="alipay" class="com.test.service.AliPay" />
+    <bean id="weichatpay" class="com.test.service.WeiChatPay" />
+
+</beans>

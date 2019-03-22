@@ -6,10 +6,15 @@ package com.jtthink;
 
 import com.test.ShenyiBean;
 import com.test.ShenyiPool;
+import com.test.service.*;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,7 +31,7 @@ public class IndexController {
             throws IOException, ClassNotFoundException, SQLException
     {
         resp.setHeader("Content-type", "text/html; Charset=utf-8");
-        PrintWriter pw = resp.getWriter();
+        //PrintWriter pw = resp.getWriter();
 
         /*ShenyiBean sb = new ShenyiBean();
         sb.setName("Shenyi");
@@ -45,9 +50,44 @@ public class IndexController {
         conn.close();*/
 
         // 使用数据库连接池
-        Class.forName("com.test.ShenyiPool");
+        /*Class.forName("com.test.ShenyiPool");
         Connection conn = com.test.ShenyiPool.getConnection();
         conn.createStatement().executeQuery("select sleep(15)");
-        com.test.ShenyiPool.freeConnection(conn);
+        com.test.ShenyiPool.freeConnection(conn);*/
+
+        // 面向切面编程，实际上就是”装饰器模式“，只不过通过配置文件来自动装配代码而已
+        /**
+         * 不自己创建对象，而由 spring 的 BeanFactory 利用配置文件（aopconfig.xml）中的 bean 来创建
+         * UserService studentService = new StudentService();
+         * */
+        /*BeanFactory factory = new ClassPathXmlApplicationContext("aopconfig.xml");
+        CommonTool commonTool = (CommonTool) factory.getBean("CommonTool");
+        UserService studentService = (UserService) factory.getBean("StudentService");
+        UserService teacherService = (UserService) factory.getBean("TeacherService");
+
+        commonTool.setResponse(resp);
+        studentService.setResponse(resp);
+        teacherService.setResponse(resp);
+
+        studentService.userLogin();
+        teacherService.userLogin();*/
+
+        /** AOP编程之：IOC容器（Inversion of Control）*/
+        /*UserPay userPay = new UserPay();
+        userPay.setResponse(resp);
+
+        //PayService payService = new BankPay();
+        //PayService payService = new AliPay();
+        PayService payService = new WeiChatPay();
+
+        userPay.setPayMethod(payService);
+        userPay.pay();*/
+
+        BeanFactory factory = new ClassPathXmlApplicationContext("payconfig.xml");
+        UserPay userPay = (UserPay) factory.getBean("userpay");
+        // 配置文件中已引用该bean，不需要创建它了
+        //PayService payService = (PayService) factory.getBean("bankpay");
+        userPay.setResponse(resp);
+        userPay.pay();
     }
 }
