@@ -10,8 +10,13 @@
             http://www.springframework.org/schema/mvc
             http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
+    <!-- component-scan配置：spring 会自动扫描base-package下的类，
+         如果有@Component @Controller @Service 等注解，则把这些类注册为bean。
+         配合@A注解，自动加载各种类 -->
     <context:component-scan base-package="com.jtthink"/>
+    <context:component-scan base-package="com.db"/>
 
+    <!-- 注解处理器 -->
     <mvc:annotation-driven/>
 
     <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -25,4 +30,22 @@
         <property name="name" value="王麻子"/>
         <property name="phone" value="135-9350-8800"/>
     </bean>
+
+    <!-- mybatis + spring 配置 -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/jt_product?user=root&amp;password=Mysql57@deb&amp;characterEncoding=utf-8"/>
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations" value="classpath:com/db/Mapper/*.xml"/>
+        <property name="typeAliasesPackage" value="com.db.Mapper"/>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.db.Mapper"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
 </beans>

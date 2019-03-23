@@ -4,6 +4,8 @@ package com.jtthink;
  * Created by cjm on 2019-2-27
  */
 
+import com.db.Mapper.UserEntity;
+import com.db.Mapper.UserMapper;
 import com.test.ShenyiBean;
 import com.test.ShenyiPool;
 import com.test.service.*;
@@ -19,12 +21,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
+import java.util.List;
 
 @Controller
 public class IndexController {
 
     @Autowired
     ShenyiBean sb;
+
+    // mybatis + spring 操作数据库
+    @Autowired
+    UserMapper userMapper;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public void loadIndex(HttpServletResponse resp)
@@ -83,12 +90,19 @@ public class IndexController {
 
         userPay.pay();*/
 
-        BeanFactory factory = new ClassPathXmlApplicationContext("payconfig.xml");
+        // 通过payconfig.xml配置文件来自动装配代码
+        /*BeanFactory factory = new ClassPathXmlApplicationContext("payconfig.xml");
         UserPay userPay = (UserPay) factory.getBean("userpay");
-        // 配置文件中已引用该bean，不需要再创建它了
+        // 配置文件中，userPay的payMethod属性已引用aliPay，所以，不需要再创建它了
         //PayMethod payMethod = (PayMethod) factory.getBean("alipay");
         userPay.setResponse(resp);
 
-        userPay.pay();
+        userPay.pay();*/
+
+        // mybatis + spring 操作数据库
+        List<UserEntity> userEntities = userMapper.selectAll();
+        for(UserEntity ue : userEntities) {
+            resp.getWriter().write(ue.getUser_name() + " " + ue.getUser_phone() + "<br/>");
+        }
     }
 }

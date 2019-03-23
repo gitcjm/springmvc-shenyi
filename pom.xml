@@ -179,5 +179,17 @@
               </configuration>
           </plugin>
       </plugins>
+
+    <!-- 解决只编译java文件，不引入resources文件的问题 -->
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
+
   </build>
+
 </project>
