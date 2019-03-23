@@ -1,5 +1,5 @@
 package com.test.service;
 
-public interface PayService {
+public interface PayMethod {
     String payMoney();
 }

@@ -76,18 +76,19 @@ public class IndexController {
         /*UserPay userPay = new UserPay();
         userPay.setResponse(resp);
 
-        //PayService payService = new BankPay();
-        //PayService payService = new AliPay();
-        PayService payService = new WeiChatPay();
+        //PayMethod payMethod = new BankPay();
+        //PayMethod payMethod = new AliPay();
+        PayMethod payMethod = new WeiChatPay();
+        userPay.setPayMethod(payMethod);
 
-        userPay.setPayMethod(payService);
         userPay.pay();*/
 
         BeanFactory factory = new ClassPathXmlApplicationContext("payconfig.xml");
         UserPay userPay = (UserPay) factory.getBean("userpay");
-        // 配置文件中已引用该bean，不需要创建它了
-        //PayService payService = (PayService) factory.getBean("bankpay");
+        // 配置文件中已引用该bean，不需要再创建它了
+        //PayMethod payMethod = (PayMethod) factory.getBean("alipay");
         userPay.setResponse(resp);
+
         userPay.pay();
     }
 }

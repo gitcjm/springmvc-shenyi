@@ -9,7 +9,7 @@ import java.io.IOException;
 public class UserPay {
 
     private HttpServletResponse response;
-    private PayService payMethod;
+    private PayMethod payMethod;
 
     public void setResponse(HttpServletResponse response) {
         this.response = response;
@@ -19,11 +19,11 @@ public class UserPay {
         return response;
     }
 
-    public void setPayMethod(PayService payMethod) {
+    public void setPayMethod(PayMethod payMethod) {
         this.payMethod = payMethod;
     }
 
-    public PayService getPayMethod() {
+    public PayMethod getPayMethod() {
         return payMethod;
     }
 
